@@ -1,7 +1,7 @@
 // import { Component } from "react";
 import { ContactItem } from "./Contact";
 import { useSelector } from "react-redux";
-import { getContacts, getFilter } from "../../redux/selectors";
+import { getContacts, getFilter } from "../../redux/contacts/selectors";
 // import PropTypes from 'prop-types';
 import { ContactListUl, ContactLi } from "./ContactList.styled";
 
@@ -10,8 +10,8 @@ export const ContactList = () => {
 
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
-  // console.log(contacts);
-  // console.log(filter);
+  console.log(contacts);
+  console.log(filter);
 
   const visibleContacts = () => {
     const normalizedFilter = filter.toLowerCase();
@@ -25,10 +25,10 @@ export const ContactList = () => {
   // console.log(visibleContacts());
 
  return (<ContactListUl>
-   {visibleContacts().map(({ id, name, phone }) => {
+   {visibleContacts().map(({ id, name, number }) => {
      return (
        <ContactLi key={id}>
-         <ContactItem id={id} name={name} phone={phone} />
+         <ContactItem id={id} name={name} number={number} />
         </ContactLi>)
    }
         )}

@@ -1,31 +1,17 @@
-// import { Component } from "react";
-// import PropTypes from 'prop-types';
+
+import { FormSubmit, Label, Span, InputContactForm, FormBtn } from "./ContactForm.styled";
 import { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { getContacts } from "redux/selectors";
-import {addContact} from "../../redux/operations"
-import { FormSubmit, Label, Span, InputContactForm, FormBtn } from "./ContactForm.styled";
+import {addContact} from "../../redux/contacts/operations"
+import { getContacts } from "../../redux/contacts/selectors";
+
 
 export const Form = () => {
 
-    // state = {
-    //   name: '',
-    //   number: '',
-    // }
-
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
   const [contactName, setContactName] = useState('');
-  const [phone, setPhone] = useState('');
-      const dispatch = useDispatch();
-    const contacts = useSelector(getContacts);
-  
-  // const handleFormSubmit = (data) => {
-  //    const { name, number } = data;
-
-  //   contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase()) ?
-  //     alert(data.name + ' is already in contacts!')
-  //     : newContackEdit(name, number);
-  // };
- 
+  const [number, setNumber] = useState('');
 
   const handleInputValue = (e) => {
     switch (e.currentTarget.name) {
@@ -33,41 +19,47 @@ export const Form = () => {
         setContactName(e.currentTarget.value);
         break;
       case 'number':
-        setPhone(e.currentTarget.value);
+        setNumber(e.currentTarget.value);
         break;
       default:
         break;
     }
   };
 
-
-
   const handleSubmit = (e) => {
-     e.preventDefault();
+    e.preventDefault();
 
-    if (
+  
+      if (
       contacts.some(contact => contact.name.toLowerCase() === contactName.toLowerCase())
     ) {
       return alert(contactName + ' is already in contacts!');
-    }
+    };
+    
+
+    
+    console.log(contacts);
+
+
     const contact = {
       contactName,
-      phone
-    }
+      number
+    };
+
+     console.log(contact);
 
     dispatch(addContact(contact));
+    
     reset();
     }
     
     const reset = () => {
-            setContactName('');
-    setPhone('');
+      setContactName('');
+      setNumber('');
     }
 
-    // render() {
-
         return (
-        <FormSubmit  onSubmit={handleSubmit}>
+        <FormSubmit onSubmit={handleSubmit}>
          <Label>
           <Span>Name</Span> 
            <InputContactForm
@@ -87,11 +79,10 @@ export const Form = () => {
           <InputContactForm
             type="tel"
             name="number"
-            // id={this.nameInputId}
-            value={phone}
+            value={number}
             onChange={handleInputValue}
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            title="Phone number must be at least 7 digits and can contain spaces, dashes, parentheses and can start with +"
             required
           /> 
            </Label>
@@ -100,7 +91,6 @@ export const Form = () => {
         </FormSubmit>  
 
         )
-    // }
 
 }
 

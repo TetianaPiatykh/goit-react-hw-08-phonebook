@@ -1,52 +1,89 @@
-// import { useState } from "react";
-import {Form} from "./ContactForm/ContactForm";
-import {ContactList} from "./ContactList/ContactList";
-import Filter from "./Filter/Filter";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchContacts } from "redux/operations";
-import { getIsLoading, getError, getContacts } from "redux/selectors";
-import { FirstTitle, SecondTitle, AppForm } from "./App.styled";
-// import {useLocalStorage} from "../../src/hooks/useLocalStorage"
+import { useEffect, lazy } from "react";
+import { useDispatch } from "react-redux";
+import { Route, Routes } from 'react-router-dom';
+import { Layout } from './Layout';
+import { PrivateRoute } from './PrivateRoute';
+import { RestrictedRoute } from './RestrictedRoute';
+import { refreshUser } from 'redux/auth/operations';
+// import { fetchContacts } from 'redux/contacts/operations';
+import { useAuth } from 'hooks';
 
+
+const RegisterPage = lazy(() => import('../pages/Register'));
+const LoginPage = lazy(() => import('../pages/Login'));
+const ContactsPage = lazy(() => import('../pages/Contacts'));
 
 export const App = () => {
 
-   const dispatch = useDispatch();
-  const isLoading = useSelector(getIsLoading);
-  const error = useSelector(getError);
-  const contacts = useSelector(getContacts);
-  console.log(contacts);
+const dispatch = useDispatch();
+const { isRefreshing } = useAuth();
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(refreshUser());
+    // dispatch(fetchContacts());
   }, [dispatch]);
- 
-  
 
-  return (
-     
-    <AppForm
-      style={{
+
+  return isRefreshing ? (
+    <b>Refreshing user...</b>
+  ) : (
+    <Routes style={{
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 36,
-          color: '#010101'
-        
-      }}
-       >
-      <FirstTitle>Phonebook</FirstTitle>     
-      <Form />
-      <SecondTitle>Contacts</SecondTitle>    
-      <Filter />
-      {isLoading && !error && <b>Request in progress...</b>}
-       {contacts && !isLoading && <ContactList />}
-      {/* <ContactList /> */}
-    </AppForm>
+        fontSize: 28,
+        width: '100%',
+          color: '#010101'}}>
+      <Route path="/" element={<Layout />}>
+        <Route
+          path="/register"
+          element={
+            <RestrictedRoute redirectTo="/contacts" component={<RegisterPage />} />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RestrictedRoute redirectTo="/contacts" component={<LoginPage />} />
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <PrivateRoute redirectTo="/login" component={<ContactsPage />} />
+          }
+        />
+      </Route>
+    </Routes>
   );
+};
+
+//   return (
+     
+//     <AppForm
+//       style={{
+//         display: 'flex',
+//         flexDirection: 'column',
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         fontSize: 36,
+//           color: '#010101'
+        
+//       }}
+//     >
+//       {/* <RegisterForm />
+//       <LoginForm/> */}
+//       <FirstTitle>Phonebook</FirstTitle>     
+//       <Form />
+//       <SecondTitle>Contacts</SecondTitle>    
+//       <Filter />
+//       {isLoading && !error && <b>Request in progress...</b>}
+//        {contacts && !isLoading && <ContactList />}
+//       {/* <ContactList /> */}
+//     </AppForm>
+//   );
   
  
-};
+// };
 

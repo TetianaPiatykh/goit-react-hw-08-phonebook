@@ -1,8 +1,8 @@
 // import { Component } from "react";
 // import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from "react-redux";
-import { getFilter } from "../../redux/selectors"
-import {setFilter} from "../../redux/contactsSlice"
+import { getFilter } from "../../redux/contacts/selectors"
+import {setFilter} from "../../redux/contacts/contactsSlice"
 import { FilterLabel, FilterInput } from './Filter.styled';
 
 
