@@ -13,16 +13,22 @@ export const LoginForm = () => {
     const form = e.currentTarget;
     
     if (!error) {
-       dispatch(
+
+    dispatch(
       logIn({
         email: form.elements.email.value,
         password: form.elements.password.value,
       })
     );
-    form.reset();
+      form.reset();
+      
+    } else {
+
+      return alert('Something went wrong. Check the correctness of the data');
+      
     }
 
-    return alert('Something went wrong. Check the correctness of the data');
+   
    
    
   };
