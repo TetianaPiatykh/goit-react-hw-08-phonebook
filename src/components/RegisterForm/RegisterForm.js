@@ -1,18 +1,24 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from 'redux/auth/operations';
-import { selectError } from 'redux/auth/selectors';
+import { selectIsLoggedIn } from 'redux/auth/selectors';
+import toast from 'react-hot-toast';
 import { FormRegister, LabelRegister, SpanRegister, FormRegisretBtn, InputRegisterForm } from './RegisterForm.styled';
 // import css from './RegisterForm.module.css';
 
 export const RegisterForm = () => {
   const dispatch = useDispatch();
-  const error = useSelector(selectError);
+  // const error = useSelector(selectError);
+  const isLogged = useSelector(selectIsLoggedIn);
 
   const handleSubmit = e => {
     e.preventDefault();
     const form = e.currentTarget;
 
-    if (!error) {
+    if (form.elements.password.value.length < 7) {
+      toast('Something went wrong. Try to change the data');
+    
+      // alert('Something went wrong. Try to change the data');
+    }
 
     dispatch(
       register({
@@ -21,13 +27,15 @@ export const RegisterForm = () => {
         password: form.elements.password.value,
       })
     );
+
+     if (isLogged) {
       form.reset();
-      
-    } else {
-
-      return alert('Something went wrong. Try to change the data');
-
     }
+      
+      
+    
+
+      // return alert('Something went wrong. Try to change the data');
 
 
    
