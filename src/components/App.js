@@ -54,6 +54,7 @@ const { isRefreshing } = useAuth();
             <PrivateRoute redirectTo="/login" component={<ContactsPage />} />
           }
           />
+          <Route path="*" element={<Navigate to="/login" replace />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
       </Route>
     </Routes>
